@@ -4,6 +4,11 @@ import scheduler
 
 app = Flask(__name__)
 
+# ✅ ต้องรันตรงนี้ (นอก __main__)
+database.init_db()
+scheduler.start_scheduler()
+
+
 @app.route("/", methods=["GET", "POST"])
 def elder():
     if request.method == "POST":
@@ -22,6 +27,7 @@ def elder():
         ).fetchall()
 
     return render_template("elder.html", meds=meds)
+
 
 @app.route("/caregiver", methods=["GET", "POST"])
 def caregiver():
@@ -46,6 +52,7 @@ def caregiver():
 
     return render_template("caregiver.html", meds=meds, settings=settings)
 
+
 @app.route("/add", methods=["POST"])
 def add():
     with database.connect() as conn:
@@ -56,6 +63,7 @@ def add():
     database.log("เพิ่มรายการยา")
     return redirect("/caregiver")
 
+
 @app.route("/delete/<int:mid>")
 def delete(mid):
     with database.connect() as conn:
@@ -63,7 +71,6 @@ def delete(mid):
     database.log("ลบรายการยา")
     return redirect("/caregiver")
 
+
 if __name__ == "__main__":
-    database.init_db()
-    scheduler.start_scheduler()
     app.run(host="0.0.0.0", port=10000)
