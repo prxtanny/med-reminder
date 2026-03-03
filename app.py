@@ -4,9 +4,11 @@ import scheduler
 
 app = Flask(__name__)
 
-# ✅ ต้องรันตรงนี้ (นอก __main__)
-database.init_db()
-scheduler.start_scheduler()
+
+@app.before_first_request
+def startup():
+    database.init_db()
+    scheduler.start_scheduler()
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -70,7 +72,3 @@ def delete(mid):
         conn.execute("DELETE FROM medicines WHERE id=?", (mid,))
     database.log("ลบรายการยา")
     return redirect("/caregiver")
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
