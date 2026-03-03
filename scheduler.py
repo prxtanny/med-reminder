@@ -28,7 +28,7 @@ def send_email(subject, body, to_email):
 def check_medicines():
     reset_if_new_day()
 
-    delay = int(database.get_setting("notify_delay"))
+    delay = int(database.get_setting("notify_delay") or 0)
     email_enabled = database.get_setting("email_enabled") == "1"
     caregiver_email = database.get_setting("caregiver_email")
 
@@ -69,4 +69,5 @@ def check_medicines():
 def start_scheduler():
     scheduler = BackgroundScheduler()
     scheduler.add_job(check_medicines, "interval", minutes=1)
+
     scheduler.start()
