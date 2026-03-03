@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="th">
+<body>
+<h2>⚙ ผู้ดูแล</h2>
+
+<form method="post">
+Email ผู้ดูแล: <input name="email" value="{{settings.email}}"><br>
+แจ้งเตือนหลัง (นาที): <input name="delay" value="{{settings.delay}}"><br>
+<label>
+<input type="checkbox" name="email_enabled"
+{% if settings.enabled == "1" %}checked{% endif %}>
+เปิดแจ้งเตือน
+</label><br>
+<button>บันทึก</button>
+</form>
+
+<hr>
+
+<form action="/add" method="post">
+ชื่อยา <input name="name">
+เวลา <input type="time" name="time">
+<button>เพิ่มยา</button>
+</form>
+
+<ul>
+{% for m in meds %}
+<li>{{m[1]}} {{m[2]}} <a href="/delete/{{m[0]}}">ลบ</a></li>
+{% endfor %}
+</ul>
+
+<a href="/">⬅ กลับ</a>
+</body>
+</html>
